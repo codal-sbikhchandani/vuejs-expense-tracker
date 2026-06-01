@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue'
 import { ref, onMounted, computed } from 'vue'
-import type { Transaction } from './types/transaction'
-import { getFromLocalStorage, saveToLocalStorage } from './utils/local-storage'
-import AddNewTransaction from './components/AddNewTransaction.vue'
-import TransactionHistory from './components/TransactionHistory.vue'
-import Balance from './components/Balance.vue'
-import IncomeExpenseTracker from './components/IncomeExpenseTracker.vue'
-import { TRANSACTION_KEY } from './constants/index.ts'
+import type { Transaction } from '@/types/transaction'
+import { getFromLocalStorage, saveToLocalStorage } from '@/utils/local-storage'
+import AddNewTransaction from '@/components/AddNewTransaction.vue'
+import TransactionHistory from '@/components/TransactionHistory.vue'
+import Balance from '@/components/Balance.vue'
+import IncomeExpenseTracker from '@/components/IncomeExpenseTracker.vue'
+import { TRANSACTION_KEY } from '@/constants/index.ts'
 
 const transactions = ref<Transaction[]>([])
 
