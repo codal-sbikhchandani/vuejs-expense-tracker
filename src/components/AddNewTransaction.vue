@@ -28,17 +28,29 @@ const onSubmit = () => {
 
 <template>
   <h3>Add new transaction</h3>
-  <form id="form" @submit.prevent="onSubmit">
+  <form id="form" data-test="form" @submit.prevent="onSubmit">
     <div class="form-control">
       <label for="text">Text</label>
-      <input type="text" id="text" placeholder="Enter text..." v-model="text" />
+      <input
+        type="text"
+        id="text"
+        placeholder="Enter text..."
+        v-model="text"
+        data-test="text-field"
+      />
     </div>
     <div class="form-control">
       <label for="amount"
         >Amount <br />
         (negative - expense, positive - income)</label
       >
-      <input type="text" id="amount" placeholder="Enter amount..." v-model="amount" />
+      <input
+        type="text"
+        id="amount"
+        placeholder="Enter amount..."
+        v-model="amount"
+        data-test="amount-field"
+      />
     </div>
     <button class="btn">Add transaction</button>
   </form>
