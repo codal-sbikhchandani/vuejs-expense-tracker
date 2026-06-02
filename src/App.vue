@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue'
-import { ref, onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import type { Transaction } from '@/types/transaction'
 import { getFromLocalStorage, saveToLocalStorage } from '@/utils/local-storage'
 import AddNewTransaction from '@/components/AddNewTransaction.vue'
@@ -8,39 +8,36 @@ import TransactionHistory from '@/components/TransactionHistory.vue'
 import Balance from '@/components/Balance.vue'
 import IncomeExpenseTracker from '@/components/IncomeExpenseTracker.vue'
 import { TRANSACTION_KEY } from '@/constants/index.ts'
+import { useTransactionStore } from '@/stores/transaction'
 
-const transactions = ref<Transaction[]>([])
+const store = useTransactionStore()
 
 onMounted(() => {
-  transactions.value = getFromLocalStorage<Transaction[]>(TRANSACTION_KEY) ?? []
+  const storedTransactions = getFromLocalStorage<Transaction[]>(TRANSACTION_KEY) ?? []
+
+  store.setTransation(storedTransactions)
 })
 
-const total = computed(() => transactions.value.reduce((acc, curr) => acc + Number(curr.amount), 0))
+const onDeleteTransaction = (id: number): void => {
+  store.deleteTransaction(id)
 
-const income = computed(() =>
-  transactions.value.reduce((acc, curr) => {
-    const amount = Number(curr.amount)
-    return amount > 0 ? acc + amount : acc
-  }, 0),
-)
-
-const deleteTransaction = (id: number): void => {
-  transactions.value = transactions.value.filter((t) => t.id !== id)
-
-  saveToLocalStorage<Transaction[]>(TRANSACTION_KEY, transactions.value)
+  saveToLocalStorage<Transaction[]>(TRANSACTION_KEY, store.transactions)
 }
 
 const onSubmitTransaction = (data: Transaction) => {
-  transactions.value.push(data)
+  store.addTransaction(data)
 
-  saveToLocalStorage<Transaction[]>(TRANSACTION_KEY, transactions.value)
+  saveToLocalStorage<Transaction[]>(TRANSACTION_KEY, store.transactions)
 }
 </script>
 
 <template>
   <Header />
-  <Balance :total="total" />
-  <IncomeExpenseTracker :income="income" :expenses="total - income" />
-  <TransactionHistory :transactions="transactions" @handleDeleteTransaction="deleteTransaction" />
+  <Balance :total="store.totalAmount" />
+  <IncomeExpenseTracker :income="store.income" :expenses="store.expense" />
+  <TransactionHistory
+    :transactions="store.transactions"
+    @handleDeleteTransaction="onDeleteTransaction"
+  />
   <AddNewTransaction @handleSubmitTransaction="onSubmitTransaction" />
 </template>
