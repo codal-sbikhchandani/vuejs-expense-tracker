@@ -9,6 +9,7 @@ defineEmits(['handleDeleteTransaction'])
   <h3>History</h3>
   <ul id="list" class="list">
     <li
+      :data-test="transaction.id"
       v-for="transaction in transactions"
       :key="transaction.id"
       :class="Number(transaction.amount) < 0 ? 'minus' : 'plus'"
