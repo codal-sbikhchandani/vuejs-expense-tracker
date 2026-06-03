@@ -4,6 +4,7 @@ import { describe, vi, it, expect } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
 import { getFromLocalStorage, saveToLocalStorage } from '@/utils/local-storage'
 import { useTransactionStore } from '@/stores/transaction'
+import { TRANSACTION_KEY } from '@/constants'
 
 vi.mock('@/utils/local-storage', () => ({
   getFromLocalStorage: vi.fn(),
@@ -50,7 +51,7 @@ describe('App', () => {
     await historyComponent.vm.$emit('handleDeleteTransaction', 99)
 
     expect(store.deleteTransaction).toHaveBeenCalledWith(99)
-    expect(saveToLocalStorage).toHaveBeenCalledWith(expect.any(String), store.transactions)
+    expect(saveToLocalStorage).toHaveBeenCalledWith(TRANSACTION_KEY, store.transactions)
   })
 
   it('handles transaction submission correctly', async () => {
@@ -72,6 +73,6 @@ describe('App', () => {
     await addComponent.vm.$emit('handleSubmitTransaction', newTx)
 
     expect(store.addTransaction).toHaveBeenCalledWith(newTx)
-    expect(saveToLocalStorage).toHaveBeenCalledWith(expect.any(String), store.transactions)
+    expect(saveToLocalStorage).toHaveBeenCalledWith(TRANSACTION_KEY, store.transactions)
   })
 })
